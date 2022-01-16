@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import { Suspense, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+
+import SysAdmLayout from '@components/Layout/SysAdmLayout';
+
+import FrontRoutes from './routes/front-routes';
 
 function App() {
+  const location = useLocation();
+  const [sysAdmFlag, setSysAdmFlag] = useState(false);
+  useEffect(() => {
+    if (location.pathname.indexOf('/sysadm') > -1) {
+      setSysAdmFlag(true);
+    }
+  }, [location]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {sysAdmFlag ? (
+        <SysAdmLayout>test</SysAdmLayout>
+      ) : (
+        <Suspense fallback={<div>loading</div>}>
+          <FrontRoutes />
+        </Suspense>
+      )}
     </div>
   );
 }
